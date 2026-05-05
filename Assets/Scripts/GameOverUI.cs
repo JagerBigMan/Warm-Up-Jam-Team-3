@@ -6,7 +6,7 @@ public class GameOverUI : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text bestScoreText;
 
-    void Awake()
+    void Start()
     {
         gameObject.SetActive(false);
     }
@@ -24,7 +24,5 @@ public class GameOverUI : MonoBehaviour
         {
             bestScoreText.text = "Best: " + ScoreManager.bestScore;
         }
-
-        Time.timeScale = 0f;
     }
 }

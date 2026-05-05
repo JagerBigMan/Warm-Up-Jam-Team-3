@@ -13,6 +13,8 @@ public class EnemySpawner : MonoBehaviour
     [Range(0f, 1f)]
     public float redSpawnChance = 0.3f;
 
+    private bool isSpawning = true;
+
     void Start()
     {
         InvokeRepeating(nameof(SpawnEnemy), 1f, spawnInterval);
@@ -20,6 +22,8 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
+        if (!isSpawning) return;
+
         Vector2 spawnPos = (Vector2)player.position +
                            Random.insideUnitCircle.normalized * spawnRadius;
 
@@ -42,5 +46,11 @@ public class EnemySpawner : MonoBehaviour
         {
             Debug.LogError("Enemy missing EnemyMovement.cs");
         }
+    }
+
+    public void StopSpawning()
+    {
+        isSpawning = false;
+        CancelInvoke(nameof(SpawnEnemy));
     }
 }

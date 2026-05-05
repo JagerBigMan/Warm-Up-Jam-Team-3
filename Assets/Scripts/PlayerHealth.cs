@@ -1,69 +1,138 @@
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public Image hpBarImage;
-    public Sprite fullSprite;
-    public Sprite emptySprite;
+    [Header("Health")]
+    public int health = 10;
+    public int maxHealth = 10;
+    public float invincibleTime = 0.5f;
+
+    [Header("UI")]
+    public SegmentedHealthBarUI healthBar;
     public GameOverUI gameOverUI;
 
     private bool isDead = false;
+    private bool isInvincible = false;
 
     void Start()
     {
         Time.timeScale = 1f;
 
-        if (hpBarImage != null && fullSprite != null)
+        health = maxHealth;
+
+        if (healthBar != null)
         {
-            hpBarImage.sprite = fullSprite;
+            healthBar.CreateBlocks(maxHealth);
+            healthBar.UpdateHealth(health);
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (isDead) return;
+        if (isDead || isInvincible) return;
 
         if (other.CompareTag("Enemy"))
         {
-            Die();
+            Enemy enemy = other.GetComponent<Enemy>();
+
+            if (enemy != null)
+            {
+                TakeDamage(enemy.damage);
+                enemy.TakeDamage(999f);
+            }
         }
     }
 
-    void OnTriggerStay2D(Collider2D other)
+    public void TakeDamage(int damage)
     {
-        if (isDead) return;
+        if (isDead || isInvincible) return;
 
-        if (other.CompareTag("Enemy"))
+        health -= damage;
+        health = Mathf.Clamp(health, 0, maxHealth);
+
+        if (healthBar != null)
+        {
+            healthBar.UpdateHealth(health);
+        }
+
+        if (health <= 0)
         {
             Die();
         }
+        else
+        {
+            StartCoroutine(InvincibleRoutine());
+        }
+    }
+
+    IEnumerator InvincibleRoutine()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(invincibleTime);
+        isInvincible = false;
     }
 
     void Die()
     {
         isDead = true;
 
-        if (hpBarImage != null && emptySprite != null)
+        EnemySpawner spawner = FindAnyObjectByType<EnemySpawner>();
+
+        if (spawner != null)
         {
-            hpBarImage.sprite = emptySprite;
+            spawner.StopSpawning();
         }
 
-        AutoRotatingTurretShooter shooter = GetComponent<AutoRotatingTurretShooter>();
+        StopPlayerShooting();
+        StopAllEnemies();
 
-        if (shooter != null)
+        if (ParticleManager.Instance != null)
         {
-            shooter.DisableShooting();
+            ParticleManager.Instance.PlayPlayerExplosion(transform.position);
         }
 
         if (gameOverUI != null)
         {
             gameOverUI.Show();
         }
+    }
 
-        if (ParticleManager.Instance != null)
+    void StopPlayerShooting()
+    {
+        AutoRotatingTurretShooter shooter = GetComponent<AutoRotatingTurretShooter>();
+
+        if (shooter != null)
         {
-            ParticleManager.Instance.PlayPlayerExplosion(transform.position);
+            shooter.DisableShooting();
+            shooter.enabled = false;
+        }
+    }
+
+    void StopAllEnemies()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        foreach (GameObject enemy in enemies)
+        {
+            MonoBehaviour[] scripts = enemy.GetComponents<MonoBehaviour>();
+
+            foreach (MonoBehaviour script in scripts)
+            {
+                if (script != null && script.GetType() != typeof(Enemy))
+                {
+                    script.enabled = false;
+                }
+            }
+
+            Rigidbody2D rb = enemy.GetComponent<Rigidbody2D>();
+
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+                rb.bodyType = RigidbodyType2D.Kinematic;
+            }
         }
     }
 }
