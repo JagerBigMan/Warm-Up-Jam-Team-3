@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class AutoRotatingBarrel : MonoBehaviour
+public class AutoRotatingTurretShooter : MonoBehaviour
 {
     public GameObject normalBulletPrefab;
     public GameObject chargedBulletPrefab;
     public Transform firePoint;
+
+    public Image chargeFillImage;
 
     public float rotationSpeed = 120f;
 
@@ -16,6 +20,8 @@ public class AutoRotatingBarrel : MonoBehaviour
     public float maxChargeTime = 1.5f;
     public float chargeThreshold = 0.15f;
 
+    public bool canShoot = true;
+
     private float chargeTimer;
     private bool isCharging;
     private bool isHolding;
@@ -25,12 +31,24 @@ public class AutoRotatingBarrel : MonoBehaviour
     void Start()
     {
         currentAmmo = maxAmmo;
+
+        if (chargeFillImage != null)
+        {
+            chargeFillImage.fillAmount = 0f;
+        }
     }
 
     void Update()
     {
+        if (!canShoot)
+        {
+            ResetCharge();
+            return;
+        }
+
         HandleInput();
         HandleReload();
+        UpdateChargeBar();
 
         if (!isCharging)
         {
@@ -41,6 +59,11 @@ public class AutoRotatingBarrel : MonoBehaviour
     void HandleInput()
     {
         if (Mouse.current == null) return;
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
@@ -68,11 +91,14 @@ public class AutoRotatingBarrel : MonoBehaviour
 
             isHolding = false;
             isCharging = false;
+            chargeTimer = 0f;
         }
     }
 
     void Shoot()
     {
+        if (!canShoot) return;
+
         currentAmmo--;
 
         float chargePercent = chargeTimer / maxChargeTime;
@@ -105,6 +131,33 @@ public class AutoRotatingBarrel : MonoBehaviour
         {
             currentAmmo++;
             reloadTimer = 0f;
+        }
+    }
+
+    void UpdateChargeBar()
+    {
+        if (chargeFillImage == null) return;
+
+        chargeFillImage.fillAmount = isHolding
+            ? chargeTimer / maxChargeTime
+            : 0f;
+    }
+
+    public void DisableShooting()
+    {
+        canShoot = false;
+        ResetCharge();
+    }
+
+    void ResetCharge()
+    {
+        isHolding = false;
+        isCharging = false;
+        chargeTimer = 0f;
+
+        if (chargeFillImage != null)
+        {
+            chargeFillImage.fillAmount = 0f;
         }
     }
 }
