@@ -1008,7 +1008,7 @@ GameObject:
   - component: {fileID: 1148895405}
   - component: {fileID: 1148895404}
   m_Layer: 5
-  m_Name: TurretHP
+  m_Name: Turret HP Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2309,7 +2309,6 @@ MonoBehaviour:
   normalBulletPrefab: {fileID: 9007708123170466722, guid: 71e6755085eee2048ba2e702a8530161, type: 3}
   chargedBulletPrefab: {fileID: 2881386800164648938, guid: 505e616df647fd84e867ab453d068f47, type: 3}
   firePoint: {fileID: 699190603}
-  chargeFillImage: {fileID: 0}
   rotationSpeed: 100
   maxAmmo: 5
   currentAmmo: 0

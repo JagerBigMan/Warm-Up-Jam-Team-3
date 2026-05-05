@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class AutoRotatingTurretShooter : MonoBehaviour
@@ -8,8 +7,6 @@ public class AutoRotatingTurretShooter : MonoBehaviour
     public GameObject normalBulletPrefab;
     public GameObject chargedBulletPrefab;
     public Transform firePoint;
-
-    public Image chargeFillImage;
 
     public float rotationSpeed = 120f;
 
@@ -32,11 +29,6 @@ public class AutoRotatingTurretShooter : MonoBehaviour
     void Start()
     {
         currentAmmo = maxAmmo;
-
-        if (chargeFillImage != null)
-        {
-            chargeFillImage.fillAmount = 0f;
-        }
     }
 
     void Update()
@@ -49,7 +41,6 @@ public class AutoRotatingTurretShooter : MonoBehaviour
 
         HandleInput();
         HandleReload();
-        UpdateChargeBar();
 
         if (!isCharging)
         {
@@ -162,15 +153,6 @@ public class AutoRotatingTurretShooter : MonoBehaviour
         }
     }
 
-    void UpdateChargeBar()
-    {
-        if (chargeFillImage == null) return;
-
-        chargeFillImage.fillAmount = isHolding
-            ? chargeTimer / maxChargeTime
-            : 0f;
-    }
-
     public void DisableShooting()
     {
         canShoot = false;
@@ -183,10 +165,5 @@ public class AutoRotatingTurretShooter : MonoBehaviour
         isCharging = false;
         chargeTimer = 0f;
         StopChargedEffect();
-
-        if (chargeFillImage != null)
-        {
-            chargeFillImage.fillAmount = 0f;
-        }
     }
 }
