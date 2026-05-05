@@ -60,5 +60,10 @@ public class PlayerHealth : MonoBehaviour
         {
             gameOverUI.Show();
         }
+
+        if (ParticleManager.Instance != null)
+        {
+            ParticleManager.Instance.PlayPlayerExplosion(transform.position);
+        }
     }
 }

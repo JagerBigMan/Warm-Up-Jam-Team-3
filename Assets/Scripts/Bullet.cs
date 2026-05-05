@@ -6,10 +6,21 @@ public class Bullet : MonoBehaviour
     public float damage = 1f;
     public float lifeTime = 3f;
 
+    private GameObject trail;
+
+    void Start()
+    {
+        if (ParticleManager.Instance != null)
+        {
+            trail = ParticleManager.Instance.PlayBulletTrail(transform);
+        }
+
+        Destroy(gameObject, lifeTime);
+    }
+
     public void SetCharge(float chargePercent)
     {
         damage = Mathf.Lerp(1f, 5f, chargePercent);
-        Destroy(gameObject, lifeTime);
     }
 
     void Update()

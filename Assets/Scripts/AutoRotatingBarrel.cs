@@ -101,12 +101,6 @@ public class AutoRotatingTurretShooter : MonoBehaviour
     {
         if (!canShoot) return;
 
-        if (fireParticlePrefab != null)
-        {
-            GameObject fx = Instantiate(fireParticlePrefab, firePoint.position, firePoint.rotation * Quaternion.Euler(0f,90f,-0f), firePoint);
-            Destroy(fx, 2f);
-        }
-
         currentAmmo--;
 
         float chargePercent = chargeTimer / maxChargeTime;
@@ -127,6 +121,19 @@ public class AutoRotatingTurretShooter : MonoBehaviour
         {
             bulletScript.SetCharge(chargePercent);
         }
+
+        if (ParticleManager.Instance != null)
+        {
+            if (chargePercent < chargeThreshold)
+            {
+                ParticleManager.Instance.PlayFireEffect(firePoint);
+            }
+            else
+            {
+                ParticleManager.Instance.PlayChargedShotEffect(firePoint);
+            }
+        }
+
     }
 
     void HandleReload()

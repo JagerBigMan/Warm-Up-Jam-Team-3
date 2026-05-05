@@ -11,6 +11,11 @@ public class Enemy : MonoBehaviour
 
         if (health <= 0)
         {
+            if (ParticleManager.Instance != null)
+            {
+                ParticleManager.Instance.PlayEnemyExplosion(transform.position);
+            }
+
             ScoreManager.AddScore(scoreValue);
             Destroy(gameObject);
         }
