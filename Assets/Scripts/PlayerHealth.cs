@@ -7,8 +7,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("Game Over");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene("EndingScreen");
         }
     }
 }

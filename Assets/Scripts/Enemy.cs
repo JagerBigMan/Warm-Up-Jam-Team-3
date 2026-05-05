@@ -3,14 +3,15 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float health = 1f;
+    public int scoreValue = 1;
 
     public void TakeDamage(float damage)
     {
         health -= damage;
-        Debug.Log(gameObject.name + " took damage: " + damage + " | health left: " + health);
 
         if (health <= 0)
         {
+            ScoreManager.AddScore(scoreValue);
             Destroy(gameObject);
         }
     }

@@ -15,6 +15,13 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector3.right * speed * Time.deltaTime);
+
+        Vector3 vp = Camera.main.WorldToViewportPoint(transform.position);
+
+        if (vp.x < 0f || vp.x > 1f || vp.y < 0f || vp.y > 1f)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
