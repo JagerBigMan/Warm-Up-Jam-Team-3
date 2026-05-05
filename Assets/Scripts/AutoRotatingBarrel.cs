@@ -8,6 +8,8 @@ public class AutoRotatingTurretShooter : MonoBehaviour
     public GameObject normalBulletPrefab;
     public GameObject chargedBulletPrefab;
     public Transform firePoint;
+    public GameObject fireParticlePrefab;
+
 
     public Image chargeFillImage;
 
@@ -98,6 +100,12 @@ public class AutoRotatingTurretShooter : MonoBehaviour
     void Shoot()
     {
         if (!canShoot) return;
+
+        if (fireParticlePrefab != null)
+        {
+            GameObject fx = Instantiate(fireParticlePrefab, firePoint.position, firePoint.rotation * Quaternion.Euler(0f,90f,-0f), firePoint);
+            Destroy(fx, 2f);
+        }
 
         currentAmmo--;
 
