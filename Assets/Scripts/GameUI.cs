@@ -8,7 +8,7 @@ public class GameUI : MonoBehaviour
 
     void Update()
     {
-        scoreText.text = "Score: " + ScoreManager.currentScore;
-        bestScoreText.text = "Best: " + ScoreManager.bestScore;
+        scoreText.text = "Score:" + ScoreManager.currentScore;
+        bestScoreText.text = "Best:" + ScoreManager.bestScore;
     }
 }

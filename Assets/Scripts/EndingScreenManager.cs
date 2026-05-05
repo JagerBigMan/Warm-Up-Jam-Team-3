@@ -18,4 +18,9 @@ public class EndingScreen : MonoBehaviour
         ScoreManager.ResetScore();
         SceneManager.LoadScene("Game");
     }
+    public void QuitGame()
+    {
+        Application.Quit();
+        Debug.Log("Quit Game");
+    }
 }
