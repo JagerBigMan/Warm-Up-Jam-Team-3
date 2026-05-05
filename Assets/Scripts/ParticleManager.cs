@@ -11,8 +11,8 @@ public class ParticleManager : MonoBehaviour
     public GameObject bulletTrailPrefab;
 
     public float fireEffectLifeTime = 2f;
-    public float chargedEffectLifeTime = 2f;
     public float explosionLifeTime = 3f;
+    public float bulletTrailBackOffset = 0.5f;
 
     void Awake()
     {
@@ -26,37 +26,40 @@ public class ParticleManager : MonoBehaviour
         GameObject fx = Instantiate(
             fireEffectPrefab,
             firePoint.position,
-            firePoint.rotation * Quaternion.Euler(0f, 0f, -90f),
+            firePoint.rotation * Quaternion.Euler(0f, 90f, 0f),
             firePoint
         );
 
         Destroy(fx, fireEffectLifeTime);
     }
 
-    public void PlayChargedShotEffect(Transform firePoint)
+    public GameObject StartChargedEffect(Transform firePoint)
     {
-        if (chargedShotEffectPrefab == null || firePoint == null) return;
+        if (chargedShotEffectPrefab == null || firePoint == null) return null;
 
         GameObject fx = Instantiate(
             chargedShotEffectPrefab,
             firePoint.position,
-            firePoint.rotation * Quaternion.Euler(0f, 0f, -90f),
+            firePoint.rotation * Quaternion.Euler(0f, 90f, 0f),
             firePoint
         );
 
-        Destroy(fx, chargedEffectLifeTime);
+        return fx;
+    }
+
+    public void StopEffect(GameObject fx)
+    {
+        if (fx != null)
+        {
+            Destroy(fx);
+        }
     }
 
     public void PlayPlayerExplosion(Vector3 position)
     {
         if (playerExplosionPrefab == null) return;
 
-        GameObject fx = Instantiate(
-            playerExplosionPrefab,
-            position,
-            Quaternion.identity
-        );
-
+        GameObject fx = Instantiate(playerExplosionPrefab, position, Quaternion.identity);
         Destroy(fx, explosionLifeTime);
     }
 
@@ -64,12 +67,7 @@ public class ParticleManager : MonoBehaviour
     {
         if (enemyExplosionPrefab == null) return;
 
-        GameObject fx = Instantiate(
-            enemyExplosionPrefab,
-            position,
-            Quaternion.identity
-        );
-
+        GameObject fx = Instantiate(enemyExplosionPrefab, position, Quaternion.identity);
         Destroy(fx, explosionLifeTime);
     }
 
@@ -80,9 +78,11 @@ public class ParticleManager : MonoBehaviour
         GameObject fx = Instantiate(
             bulletTrailPrefab,
             bullet.position,
-            bullet.rotation * Quaternion.Euler(0f, 0f, 90f),
+            bullet.rotation * Quaternion.Euler(0f, -90f, 0f),
             bullet
         );
+
+        fx.transform.localPosition = Vector3.left * bulletTrailBackOffset;
 
         return fx;
     }

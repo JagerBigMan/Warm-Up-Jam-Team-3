@@ -1566,8 +1566,8 @@ MonoBehaviour:
   enemyExplosionPrefab: {fileID: 988488610725986064, guid: 295a019abb5c33047b208b9866c7f77d, type: 3}
   bulletTrailPrefab: {fileID: 20897509162054610, guid: c94df940625f00f468aa583edcb7e8ee, type: 3}
   fireEffectLifeTime: 2
-  chargedEffectLifeTime: 2
   explosionLifeTime: 3
+  bulletTrailBackOffset: 0.5
 --- !u!1 &1583469131
 GameObject:
   m_ObjectHideFlags: 0
@@ -2108,7 +2108,6 @@ MonoBehaviour:
   normalBulletPrefab: {fileID: 9007708123170466722, guid: 71e6755085eee2048ba2e702a8530161, type: 3}
   chargedBulletPrefab: {fileID: 2881386800164648938, guid: 505e616df647fd84e867ab453d068f47, type: 3}
   firePoint: {fileID: 699190603}
-  fireParticlePrefab: {fileID: 3699521846440539768, guid: 28e0663ec251ecc4f9adbb7d9ee38a46, type: 3}
   chargeFillImage: {fileID: 0}
   rotationSpeed: 100
   maxAmmo: 5

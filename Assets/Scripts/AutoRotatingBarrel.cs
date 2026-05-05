@@ -8,8 +8,6 @@ public class AutoRotatingTurretShooter : MonoBehaviour
     public GameObject normalBulletPrefab;
     public GameObject chargedBulletPrefab;
     public Transform firePoint;
-    public GameObject fireParticlePrefab;
-
 
     public Image chargeFillImage;
 
@@ -27,8 +25,9 @@ public class AutoRotatingTurretShooter : MonoBehaviour
     private float chargeTimer;
     private bool isCharging;
     private bool isHolding;
-
     private float reloadTimer;
+
+    private GameObject activeChargedEffect;
 
     void Start()
     {
@@ -79,9 +78,10 @@ public class AutoRotatingTurretShooter : MonoBehaviour
         {
             chargeTimer += Time.deltaTime;
 
-            if (chargeTimer >= chargeThreshold)
+            if (chargeTimer >= chargeThreshold && !isCharging)
             {
                 isCharging = true;
+                StartChargedEffect();
             }
 
             chargeTimer = Mathf.Clamp(chargeTimer, 0f, maxChargeTime);
@@ -94,6 +94,7 @@ public class AutoRotatingTurretShooter : MonoBehaviour
             isHolding = false;
             isCharging = false;
             chargeTimer = 0f;
+            StopChargedEffect();
         }
     }
 
@@ -122,18 +123,30 @@ public class AutoRotatingTurretShooter : MonoBehaviour
             bulletScript.SetCharge(chargePercent);
         }
 
+        if (ParticleManager.Instance != null && chargePercent < chargeThreshold)
+        {
+            ParticleManager.Instance.PlayFireEffect(firePoint);
+        }
+    }
+
+    void StartChargedEffect()
+    {
+        if (activeChargedEffect != null) return;
+
         if (ParticleManager.Instance != null)
         {
-            if (chargePercent < chargeThreshold)
-            {
-                ParticleManager.Instance.PlayFireEffect(firePoint);
-            }
-            else
-            {
-                ParticleManager.Instance.PlayChargedShotEffect(firePoint);
-            }
+            activeChargedEffect = ParticleManager.Instance.StartChargedEffect(firePoint);
+        }
+    }
+
+    void StopChargedEffect()
+    {
+        if (ParticleManager.Instance != null)
+        {
+            ParticleManager.Instance.StopEffect(activeChargedEffect);
         }
 
+        activeChargedEffect = null;
     }
 
     void HandleReload()
@@ -169,6 +182,7 @@ public class AutoRotatingTurretShooter : MonoBehaviour
         isHolding = false;
         isCharging = false;
         chargeTimer = 0f;
+        StopChargedEffect();
 
         if (chargeFillImage != null)
         {
