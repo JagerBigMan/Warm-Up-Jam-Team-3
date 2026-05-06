@@ -1694,7 +1694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b666ac4e59fa4ca47b6cef794b12cef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SegmentedHealthBarUI
-  hpBlockPrefab: {fileID: 2694828795071002273, guid: d78d8a7a85e0f2e4084d731fc1a8c6e3, type: 3}
+  hpBlockPrefab: {fileID: 1138270980272698451, guid: d78d8a7a85e0f2e4084d731fc1a8c6e3, type: 3}
   hpBlockParent: {fileID: 1703765325}
   fullColor: {r: 0.23137255, g: 1, b: 0.7137255, a: 1}
   emptyColor: {r: 1, g: 0.4, b: 0.4, a: 1}
@@ -1716,7 +1716,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 2
+  m_Spacing: 4
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
