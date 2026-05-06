@@ -5,11 +5,20 @@ public class Bullet : MonoBehaviour
     public float speed = 12f;
     public float damage = 1f;
     public float lifeTime = 3f;
+    public Transform visual;
 
     private GameObject trail;
+    private Vector3 moveDirection;
 
     void Start()
     {
+        moveDirection = transform.right;
+
+        if (visual != null)
+        {
+            visual.localRotation = Quaternion.Euler(0f, 0f, 90f);
+        }
+
         if (ParticleManager.Instance != null)
         {
             trail = ParticleManager.Instance.PlayBulletTrail(transform);
@@ -25,7 +34,7 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(Vector3.right * speed * Time.deltaTime);
+        transform.position += moveDirection * speed * Time.deltaTime;
 
         Vector3 vp = Camera.main.WorldToViewportPoint(transform.position);
 

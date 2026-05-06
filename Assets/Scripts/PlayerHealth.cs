@@ -11,6 +11,10 @@ public class PlayerHealth : MonoBehaviour
     [Header("UI")]
     public SegmentedHealthBarUI healthBar;
     public GameOverUI gameOverUI;
+    public TurretSpriteManager turretSpriteManager;
+
+    [Header("Turret Visuals")]
+    public TurretVisualManager turretVisualManager;
 
     private bool isDead = false;
     private bool isInvincible = false;
@@ -25,6 +29,16 @@ public class PlayerHealth : MonoBehaviour
         {
             healthBar.CreateBlocks(maxHealth);
             healthBar.UpdateHealth(health);
+        }
+
+        if (turretSpriteManager != null)
+        {
+            turretSpriteManager.SetAlive();
+        }
+
+        if (turretVisualManager != null)
+        {
+            turretVisualManager.SetAlive();
         }
     }
 
@@ -77,8 +91,18 @@ public class PlayerHealth : MonoBehaviour
     {
         isDead = true;
 
-        EnemySpawner spawner = FindAnyObjectByType<EnemySpawner>();
+        if (turretSpriteManager != null)
+        {
+            turretSpriteManager.SetDead();
+        }
 
+        if (turretVisualManager != null)
+        {
+            turretVisualManager.SetDead();
+        }
+
+        EnemySpawner spawner = FindAnyObjectByType<EnemySpawner>();
+       
         if (spawner != null)
         {
             spawner.StopSpawning();
@@ -100,7 +124,7 @@ public class PlayerHealth : MonoBehaviour
 
     void StopPlayerShooting()
     {
-        AutoRotatingTurretShooter shooter = GetComponent<AutoRotatingTurretShooter>();
+        TurretManager shooter = GetComponent<TurretManager>();
 
         if (shooter != null)
         {

@@ -33,6 +33,22 @@ public class ParticleManager : MonoBehaviour
         Destroy(fx, fireEffectLifeTime);
     }
 
+    public void PlayChargedFireEffect(Transform firePoint)
+    {
+        if (fireEffectPrefab == null || firePoint == null) return;
+
+        GameObject fx = Instantiate(
+            fireEffectPrefab,
+            firePoint.position,
+            firePoint.rotation * Quaternion.Euler(0f, 90f, 0f),
+            firePoint
+        );
+
+        fx.transform.localScale *= 1.5f;
+
+        Destroy(fx, fireEffectLifeTime);
+    }
+
     public GameObject StartChargedEffect(Transform firePoint)
     {
         if (chargedShotEffectPrefab == null || firePoint == null) return null;

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class BulletCountUI : MonoBehaviour
 {
-    public AutoRotatingTurretShooter shooter;
+    public TurretManager shooter;
 
     public GameObject bulletIconPrefab;
     public Transform bulletIconParent;

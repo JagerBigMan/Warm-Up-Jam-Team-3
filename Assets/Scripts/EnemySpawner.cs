@@ -46,6 +46,22 @@ public class EnemySpawner : MonoBehaviour
         {
             Debug.LogError("Enemy missing EnemyMovement.cs");
         }
+
+        FlipEnemy(enemy, spawnPos);
+
+        EnemyFaceTurret face = enemy.GetComponent<EnemyFaceTurret>();
+        if (face != null)
+        {
+            face.SetTurret(player);
+        }
+    }
+
+    void FlipEnemy(GameObject enemy, Vector2 spawnPos)
+    {
+        SpriteRenderer sr = enemy.GetComponent<SpriteRenderer>();
+        if (sr == null) return;
+
+        sr.flipX = spawnPos.x < player.position.x;
     }
 
     public void StopSpawning()

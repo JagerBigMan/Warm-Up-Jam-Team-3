@@ -4906,7 +4906,7 @@ GameObject:
   - component: {fileID: 744559268141526148}
   - component: {fileID: 3391828827288486393}
   m_Layer: 0
-  m_Name: Player Explosion (2)
+  m_Name: Player Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

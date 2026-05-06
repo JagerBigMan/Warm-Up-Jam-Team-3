@@ -2,13 +2,12 @@
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 
-public class AutoRotatingTurretShooter : MonoBehaviour
+public class TurretManager : MonoBehaviour
 {
     public GameObject normalBulletPrefab;
     public GameObject chargedBulletPrefab;
     public Transform firePoint;
-
-    public float rotationSpeed = 120f;
+    public Transform barrelPivot;
 
     public int maxAmmo = 5;
     public int currentAmmo;
@@ -41,11 +40,6 @@ public class AutoRotatingTurretShooter : MonoBehaviour
 
         HandleInput();
         HandleReload();
-
-        if (!isCharging)
-        {
-            transform.Rotate(0f, 0f, -rotationSpeed * Time.deltaTime);
-        }
     }
 
     void HandleInput()
@@ -114,9 +108,16 @@ public class AutoRotatingTurretShooter : MonoBehaviour
             bulletScript.SetCharge(chargePercent);
         }
 
-        if (ParticleManager.Instance != null && chargePercent < chargeThreshold)
+        if (ParticleManager.Instance != null)
         {
-            ParticleManager.Instance.PlayFireEffect(firePoint);
+            if (chargePercent < chargeThreshold)
+            {
+                ParticleManager.Instance.PlayFireEffect(firePoint);
+            }
+            else
+            {
+                ParticleManager.Instance.PlayChargedFireEffect(firePoint);
+            }
         }
     }
 
@@ -151,6 +152,11 @@ public class AutoRotatingTurretShooter : MonoBehaviour
             currentAmmo++;
             reloadTimer = 0f;
         }
+    }
+
+    public bool IsChargingShot()
+    {
+        return isCharging;
     }
 
     public void DisableShooting()
