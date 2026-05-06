@@ -101,6 +101,8 @@ public class TurretManager : MonoBehaviour
             firePoint.rotation
         );
 
+        bullet.transform.localScale = normalBulletPrefab.transform.localScale;
+
         Bullet bulletScript = bullet.GetComponent<Bullet>();
 
         if (bulletScript != null)
@@ -110,14 +112,7 @@ public class TurretManager : MonoBehaviour
 
         if (ParticleManager.Instance != null)
         {
-            if (chargePercent < chargeThreshold)
-            {
-                ParticleManager.Instance.PlayFireEffect(firePoint);
-            }
-            else
-            {
-                ParticleManager.Instance.PlayChargedFireEffect(firePoint);
-            }
+            ParticleManager.Instance.PlayFireEffect(firePoint);
         }
     }
 

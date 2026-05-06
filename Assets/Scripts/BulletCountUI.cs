@@ -16,6 +16,16 @@ public class BulletCountUI : MonoBehaviour
 
     void Start()
     {
+        if (shooter == null)
+        {
+            shooter = FindAnyObjectByType<TurretManager>();
+        }
+
+        if (bulletIconParent == null)
+        {
+            bulletIconParent = transform;
+        }
+
         CreateBulletIcons();
         UpdateAmmoUI();
     }
@@ -27,13 +37,35 @@ public class BulletCountUI : MonoBehaviour
 
     void CreateBulletIcons()
     {
+        if (shooter == null) return;
+        if (bulletIconPrefab == null) return;
+        if (bulletIconParent == null) return;
+
+        foreach (Transform child in bulletIconParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        bulletIcons.Clear();
+
         for (int i = 0; i < shooter.maxAmmo; i++)
         {
             GameObject icon = Instantiate(bulletIconPrefab, bulletIconParent);
+            icon.SetActive(true);
+
+            RectTransform rect = icon.GetComponent<RectTransform>();
+
+            if (rect != null)
+            {
+                rect.localScale = Vector3.one;
+            }
+
             Image image = icon.GetComponent<Image>();
 
             if (image != null)
             {
+                image.enabled = true;
+                image.color = fullColor;
                 bulletIcons.Add(image);
             }
         }
